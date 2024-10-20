@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import Expense from '../models/Expense';
-import User from '../models/user'; 
+import Expense from '../models/expense';
+import User from '../models/user';
 import { Parser } from 'json2csv';  
 export const addExpense = async (req: Request, res: Response) => {
   const { title, amount, userEmail, participants, splitMethod, specificAmounts, percentages } = req.body;
