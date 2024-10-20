@@ -5,7 +5,6 @@ import Joi from 'joi'; // Import Joi for validation
 
 const JWT_SECRET = 'your_jwt_secret'; 
 
-// Define a Joi schema for user creation
 const userSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
   email: Joi.string().email().required(),
@@ -24,7 +23,7 @@ export async function createUser(req: Request, res: Response) {
   }
 
   try {
-    // Check if user already exists
+    
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ error: 'Email already in use' });
@@ -36,7 +35,7 @@ export async function createUser(req: Request, res: Response) {
       mobile,
     });
 
-    // Save the user to the database
+    
     await newUser.save();
 
     // Send a response
@@ -90,12 +89,12 @@ export async function deleteUser(req: Request, res: Response) {
       res.status(500).json({ error: 'Server error' });
     }
   }
-  // Use a strong secret and store it securely
+ 
 
   export async function getUser(req: Request, res: Response) {
     const { email, mobile } = req.body;
   
-    // Check if email and password are provided
+
     if (!email || !mobile) {
       return res.status(400).json({ error: 'Email and password are required' });
     }

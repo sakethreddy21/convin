@@ -1,18 +1,18 @@
 import { Request, Response } from 'express';
 import Expense from '../models/Expense';
-import User from '../models/user'; // Import the User model to find users by email
-import { Parser } from 'json2csv';  // For CSV export
+import User from '../models/user'; 
+import { Parser } from 'json2csv';  
 export const addExpense = async (req: Request, res: Response) => {
   const { title, amount, userEmail, participants, splitMethod, specificAmounts, percentages } = req.body;
 
   try {
-    // Find the user by email
+
     const user = await User.findOne({ email: userEmail });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Ensure participants' emails are valid and exist in the system
+  
     const participantDocs = await Promise.all(
       participants.map(async (p: any) => {
         const participant = await User.findOne({ email: p.email });
@@ -21,12 +21,11 @@ export const addExpense = async (req: Request, res: Response) => {
         }
         return {
           ...p,
-          userID: participant._id, // Get the ObjectId from the participant's document
+          userID: participant._id, 
         };
       })
     );
 
-    // Validation logic for splitMethod (if it's 'percentage', the total must be 100)
     if (splitMethod === 'percentage' && percentages.reduce((a: any, b: any) => a + b, 0) !== 100) {
       return res.status(400).json({ message: 'Percentages must add up to 100' });
     }
@@ -35,14 +34,14 @@ export const addExpense = async (req: Request, res: Response) => {
     const expense = new Expense({
       title,
       amount,
-      userID: user._id, // Use the user ID from the found user
-      participants: participantDocs, // Use the participant documents with their ObjectIds
+      userID: user._id, 
+      participants: participantDocs, 
       splitMethod,
       specificAmounts,
       percentages,
     });
 
-    // Save the expense to the database
+   
     await expense.save();
 
     res.status(201).json({ message: 'Expense added successfully', expense });
