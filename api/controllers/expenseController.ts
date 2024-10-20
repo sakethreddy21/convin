@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Expense from '../models/expense';
+import Expense from '../models/Expense';
 import User from '../models/user';
 import { Parser } from 'json2csv';  
 export const addExpense = async (req: Request, res: Response) => {
